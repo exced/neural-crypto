@@ -78,7 +78,7 @@ class TPM:
                     "\'hebbian\', \'anti_hebbian\' and \'random_walk\'.")
 
     #make key from weight matrix
-    def makeKey(self, key_length):
+    def makeKey(self, key_length, iv_length):
         '''makeKey
         weight matrix to key and iv : use sha256 on concatenated weights 
         '''
@@ -90,10 +90,10 @@ class TPM:
                 iv += str(self.W[i, j])
             key += str(self.W[i, j])
         # sha1 iv
-        hash_object_iv = hashlib.sha1(iv)
+        hash_object_iv = hashlib.sha256(iv)
         hex_dig_iv = hash_object_iv.hexdigest()            
         # sha256 key
         hash_object_key = hashlib.sha256(key)
         hex_dig_key = hash_object_key.hexdigest()
-        return (hex_dig_key[0:int(key_length / 4)], hex_dig_iv)
+        return (hex_dig_key[0:int(key_length / 4)], hex_dig_iv[0:int(iv_length / 4)])
 

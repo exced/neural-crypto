@@ -23,21 +23,24 @@ def main(argv):
     N = 12
     L = 4
     key_length = 128 #bits
+    iv_length = 128 #bits
     update_rules = ['hebbian', 'anti_hebbian', 'random_walk']
     update_rule = update_rules[0]
 
     try:
-        opts, args = getopt.getopt(argv,"hK:N:L:k:",["K=","N=","L=","k="])
+        opts, args = getopt.getopt(argv,"hK:N:L:k:v:",["K=","N=","L=","k=","i="])
     except getopt.GetoptError:
         print 'unknown options'
-        print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -key <key options>'
+        print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
         print 'key length options : 128, 192, 256'
+        print 'iv length : [0:256] multiple of 4'
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -key <key options>'
+            print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
             print 'default values : K=8, N=12, L=4'
             print 'key length options : 128, 192, 256'
+            print 'iv length : [0:256]'
             sys.exit()
         elif opt in ("-K", "--K"):
             K = int(arg)
@@ -45,6 +48,8 @@ def main(argv):
             N = int(arg)
         elif opt in ("-L", "--L"):
             L = int(arg)
+        elif opt in ("-v", "--v"):
+            iv_length = int(arg)            
         elif opt in ("-k", "--k"):
             if arg == "128" or arg == "192" or arg == "256":
                 key_length = int(arg) 
@@ -54,7 +59,7 @@ def main(argv):
                 sys.exit()
 
     #Create TPM for Alice, Bob and Eve. Eve eavesdrops communication of Alice and Bob
-    print "Creating machines : K=" + str(K) + ", N=" + str(N) + ", L=" + str(L) + "key=" + str(key_length)
+    print "Creating machines : K=" + str(K) + ", N=" + str(N) + ", L=" + str(L) + "k=" + str(key_length) + "v=" + str(iv_length)
     print "Using " + update_rule + " update rule."
     Alice = TPM(K, N, L)
     Bob = TPM(K, N, L)
@@ -100,9 +105,9 @@ def main(argv):
 
     # results
     print "Time taken = " + str(time_taken)+ " seconds."
-    Alice_key, Alice_iv = Alice.makeKey(key_length)
-    Bob_key, Bob_iv = Bob.makeKey(key_length)
-    Eve_key, Eve_iv = Eve.makeKey(key_length)
+    Alice_key, Alice_iv = Alice.makeKey(key_length, iv_length)
+    Bob_key, Bob_iv = Bob.makeKey(key_length, iv_length)
+    Eve_key, Eve_iv = Eve.makeKey(key_length, iv_length)
     print "Alice's gen key = " + str(len(Alice_key)) + " key : " + Alice_key + " iv : " + Alice_iv;
     print "Bob's gen key = " + str(len(Bob_key)) + " key : " + Bob_key + " iv : " + Bob_iv;
     print "Eve's gen key = " + str(len(Eve_key)) + " key : " + Eve_key + " iv : " + Eve_iv;

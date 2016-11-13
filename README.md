@@ -7,10 +7,10 @@ Neural crypto avoids a Diffie-Hellman exchange key protocol from MITM attack.
 
 ## Generate key and IV for AES encryption
 ```bash
-python run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -key <key options>
+python run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>
 ```
 key length options : 128, 192, 256
-
+iv length : [0:256]
 
 ## use with openSSL
 ### Cipher
