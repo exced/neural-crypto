@@ -11,12 +11,14 @@ class TPM:
     N - number of input neurons connected to each hidden neuron
     L - range of each weight ({-L,..,0,..,+L })
     W - weight matrix between input and hidden layers. Dimensions : [K, N]
+    tau - output score
     '''
     def __init__(self, K=8, N=12, L=4):
         self.K = K
         self.N = N
         self.L = L
         self.W = np.random.randint(-L, L + 1, [K, N])
+        self.tau = 0
 
     def get_output(self, X):
         '''

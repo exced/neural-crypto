@@ -3,14 +3,12 @@ import numpy as np
 import time, sys, getopt
 import matplotlib.pyplot as plt
 
-#Random number generator
 def random(K, N, L):
     '''random
     return a random vector input for TPM
     '''
     return np.random.randint(-L, L + 1, [K, N])
 
-#Function to evaluate the synchronization score between two machines.
 def sync_score(TPM1, TPM2, L):
     '''sync_score
     Synchronize the score of 2 tree parity machines
@@ -32,12 +30,12 @@ def main(argv):
         opts, args = getopt.getopt(argv,"hK:N:L:k:",["K=","N=","L=","k="])
     except getopt.GetoptError:
         print 'unknown options'
-        print 'run.py -K <nb hidden neurons> -L <nb input neurons> -N <range of weight> -key <key options>'
+        print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -key <key options>'
         print 'key length options : 128, 192, 256'
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'run.py -K <nb hidden neurons> -L <nb input neurons> -N <range of weight> -key <key options>'
+            print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -key <key options>'
             print 'default values : K=8, N=12, L=4'
             print 'key length options : 128, 192, 256'
             sys.exit()
@@ -72,15 +70,15 @@ def main(argv):
 
     while score < 100:
 
-        X = random(K, N, L) # Create random vector of dimensions [K, N]
+        X = random(K, N, L) # Create random vector [K, N]
 
         # compute outputs of TPMs
         tauA = Alice.get_output(X) 
         tauB = Bob.get_output(X) 
         tauE = Eve.get_output(X)
 
-        Alice.update(tauB, update_rule) # Update Alice with Bob's output
-        Bob.update(tauA, update_rule) # Update Bob with Alice's output
+        Alice.update(tauB, update_rule) 
+        Bob.update(tauA, update_rule) 
 
         #Eve would update only if tauA = tauB = tauE
         if tauA == tauB == tauE:
@@ -89,16 +87,16 @@ def main(argv):
 
         nb_updates += 1
         # sync of Alice and Bob
-        score = 100 * sync_score(Alice, Bob, L) # Calculate the synchronization of the 2 machines
-        sync_history.append(score) # Add sync score to history, so that we can plot a graph later.
+        score = 100 * sync_score(Alice, Bob, L) # Calculate the synchronization of Alice and Bob
+        sync_history.append(score) # plot purpose
         # sync of Alice and Eve
-        score_eve = 100 * sync_score(Alice, Eve, L) # Calculate the synchronization of the 2 machines
-        sync_history_eve.append(score_eve) # Add sync score to history, so that we can plot a graph later.        
+        score_eve = 100 * sync_score(Alice, Eve, L) # Calculate the synchronization of Alice and Eve
+        sync_history_eve.append(score_eve) # plot purpose        
 
         sys.stdout.write("\r" + "Synchronization = " + str(int(score)) + "%   /  Updates = " + str(nb_updates) + " / Eve's updates = " + str(nb_eve_updates)) 
 
     end_time = time.time()
-    time_taken = end_time - start_time # Calculate time taken
+    time_taken = end_time - start_time 
 
     # results
     print "Time taken = " + str(time_taken)+ " seconds."
