@@ -100,9 +100,12 @@ def main(argv):
 
     # results
     print "Time taken = " + str(time_taken)+ " seconds."
-    print "Alice's gen key = " + str(len(Alice.makeKey(key_length))) + " : " + Alice.makeKey(key_length);
-    print "BoB's gen key = " + str(len(Bob.makeKey(key_length))) + " : " + Bob.makeKey(key_length);
-    print "Eve's gen key = " + str(len(Eve.makeKey(key_length))) + " : " + Eve.makeKey(key_length);
+    Alice_key, Alice_iv = Alice.makeKey(key_length)
+    Bob_key, Bob_iv = Bob.makeKey(key_length)
+    Eve_key, Eve_iv = Eve.makeKey(key_length)
+    print "Alice's gen key = " + str(len(Alice_key)) + " key : " + Alice_key + " iv : " + Alice_iv;
+    print "Bob's gen key = " + str(len(Bob_key)) + " key : " + Bob_key + " iv : " + Bob_iv;
+    print "Eve's gen key = " + str(len(Eve_key)) + " key : " + Eve_key + " iv : " + Eve_iv;
 
     #Plot graph 
     plt.figure(1)

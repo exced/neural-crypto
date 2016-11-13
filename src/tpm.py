@@ -80,14 +80,20 @@ class TPM:
     #make key from weight matrix
     def makeKey(self, key_length):
         '''makeKey
-        Gen datas from matrix and hash them with sha256 
+        weight matrix to key and iv : use sha256 on concatenated weights 
         '''
         key = ''
+        iv = ''
         # generate key
         for (i, j), _ in np.ndenumerate(self.W):
-            key += chr(((1 + i * j) * self.W[i, j] + self.L) % 256)
-        # sha256
-        hash_object = hashlib.sha256(key)
-        hex_dig = hash_object.hexdigest()
-        return hex_dig[0:int(key_length / 4)]
+            if i == j:
+                iv += str(self.W[i, j])
+            key += str(self.W[i, j])
+        # sha1 iv
+        hash_object_iv = hashlib.sha1(iv)
+        hex_dig_iv = hash_object_iv.hexdigest()            
+        # sha256 key
+        hash_object_key = hashlib.sha256(key)
+        hex_dig_key = hash_object_key.hexdigest()
+        return (hex_dig_key[0:int(key_length / 4)], hex_dig_iv)
 
