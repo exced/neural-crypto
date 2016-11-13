@@ -35,16 +35,25 @@ class TPM:
         return tau
 
     def hebbian(self, tau1, tau2):
+        '''
+        hebbian update rule
+        '''
         for (i, j), _ in np.ndenumerate(self.W):
             self.W[i, j] += self.X[i, j] * tau1 * theta(self.sigma[i], tau1) * theta(tau1, tau2)
             self.W[i, j] = np.clip(self.W[i, j] , -self.L, self.L)
 
     def anti_hebbian(self, tau1, tau2):
+        '''
+        anti-hebbian update rule
+        '''
         for (i, j), _ in np.ndenumerate(self.W):
             self.W[i, j] -= self.X[i, j] * tau1 * theta(self.sigma[i], tau1) * theta(tau1, tau2)
             self.W[i, j] = np.clip(self.W[i, j], -self.L, self.L)
 
     def random_walk(self, tau1, tau2):
+        '''
+        random walk update rule
+        '''
         for (i, j), _ in np.ndenumerate(self.W):
             self.W[i, j] += self.X[i, j] * theta(self.sigma[i], tau1) * theta(tau1, tau2)
             self.W[i, j] = np.clip(self.W[i, j] , -self.L, self.L)        
