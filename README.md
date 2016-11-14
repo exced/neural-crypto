@@ -5,14 +5,18 @@ Computer Science and Software Engineering.
 
 Neural crypto avoids a Diffie-Hellman exchange key protocol from MITM attack.
 
+## openSSL
+Required openSSL to encyrpt with AES cipher.
+
 ## Generate key and IV for AES encryption
 ```bash
-python run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>
+python run.py -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>
 ```
 key length options : 128, 192, 256
 iv length : [0:256]
+if inputfile is read, aes encryption is executed.
 
-## use with openSSL
+## Use with openSSL
 ### Cipher
 ```bash
 openssl enc -aes128 -K <key> -iv <init vector> -in <inputfile> -out <outputfile>

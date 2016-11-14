@@ -26,22 +26,29 @@ def main(argv):
     iv_length = 128 #bits
     update_rules = ['hebbian', 'anti_hebbian', 'random_walk']
     update_rule = update_rules[0]
-
+    input_file = ''
+    output_file = 'out.enc'
+    has_input_file = False
     try:
-        opts, args = getopt.getopt(argv,"hK:N:L:k:v:",["K=","N=","L=","k=","i="])
+        opts, args = getopt.getopt(argv,"hK:N:L:k:v:i:o:",["K=","N=","L=","k=","v=","i=","o="])
     except getopt.GetoptError:
         print 'unknown options'
-        print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
+        print 'run.py -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
         print 'key length options : 128, 192, 256'
         print 'iv length : [0:256] multiple of 4'
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'run.py -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
+            print 'run.py -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
             print 'default values : K=8, N=12, L=4'
             print 'key length options : 128, 192, 256'
             print 'iv length : [0:256]'
             sys.exit()
+        elif opt in ("-i", "--i"):
+            has_input_file = True
+            input_file = arg
+        elif opt in ("-o", "--o"):
+            output_file = int(arg)
         elif opt in ("-K", "--K"):
             K = int(arg)
         elif opt in ("-N", "--N"):
@@ -59,8 +66,7 @@ def main(argv):
                 sys.exit()
 
     #Create TPM for Alice, Bob and Eve. Eve eavesdrops communication of Alice and Bob
-    print "Creating machines : K=" + str(K) + ", N=" + str(N) + ", L=" + str(L) + "k=" + str(key_length) + "v=" + str(iv_length)
-    print "Using " + update_rule + " update rule."
+    print "Creating machines : K=" + str(K) + ", N=" + str(N) + ", L=" + str(L) + ", k=" + str(key_length) + ", v=" + str(iv_length)
     Alice = TPM(K, N, L)
     Bob = TPM(K, N, L)
     Eve = TPM(K, N, L)
@@ -104,13 +110,23 @@ def main(argv):
     time_taken = end_time - start_time 
 
     # results
-    print "Time taken = " + str(time_taken)+ " seconds."
+    print "\nTime taken = " + str(time_taken)+ " seconds."
     Alice_key, Alice_iv = Alice.makeKey(key_length, iv_length)
     Bob_key, Bob_iv = Bob.makeKey(key_length, iv_length)
     Eve_key, Eve_iv = Eve.makeKey(key_length, iv_length)
     print "Alice's gen key = " + str(len(Alice_key)) + " key : " + Alice_key + " iv : " + Alice_iv;
     print "Bob's gen key = " + str(len(Bob_key)) + " key : " + Bob_key + " iv : " + Bob_iv;
     print "Eve's gen key = " + str(len(Eve_key)) + " key : " + Eve_key + " iv : " + Eve_iv;
+
+    if Alice_key == Bob_key and Alice_iv == Bob_iv:
+        if has_input_file:
+            bashCommand = "openssl enc -aes"+ str(key_length) +" -K "+ Alice_key + " -iv " + Alice_iv +" -in " + input_file +  " -out " + output_file
+            import subprocess
+            process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()
+            print "encryption with aes" + str(key_length) + " done."
+    else:
+        print "error, Alice and Bob have different key or iv"            
 
     #Plot graph 
     plt.figure(1)
