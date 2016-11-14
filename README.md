@@ -17,13 +17,14 @@ iv length : [0:256]
 if inputfile is read, aes encryption is executed.
 
 ## Use with openSSL
-### Cipher
+if inputfile option not set, use openSSL to encrypt file.
+### Cipher with AES
 ```bash
 openssl enc -aes128 -K <key> -iv <init vector> -in <inputfile> -out <outputfile>
 openssl enc -aes192 -K <key> -iv <init vector> -in <inputfile> -out <outputfile>
 openssl enc -aes256 -K <key> -iv <init vector> -in <inputfile> -out <outputfile>
 ```
-### Decipher
+### Decipher with AES
 ```bash
 openssl enc -aes128 -K <key> -iv <init vector> -in <inputfile(enc)> -out <outputfile> -d
 openssl enc -aes192 -K <key> -iv <init vector> -in <inputfile(enc)> -out <outputfile> -d
