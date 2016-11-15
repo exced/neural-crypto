@@ -1,4 +1,4 @@
-# Neural cryptography protocol for exchange key
+# Neural cryptography protocol for key exchange
 
 Implementation of the exchange key protocol described in International Journal of Advanced Research in
 Computer Science and Software Engineering.
