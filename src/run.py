@@ -120,13 +120,18 @@ def main(argv):
 
     if Alice_key == Bob_key and Alice_iv == Bob_iv:
         if has_input_file:
-            bashCommand = "openssl enc -aes"+ str(key_length) +" -K "+ Alice_key + " -iv " + Alice_iv +" -in " + input_file +  " -out " + output_file
             import subprocess
+            # cipher with Alice key and IV
+            bashCommand = "openssl enc -aes"+ str(key_length) +" -K "+ Alice_key + " -iv " + Alice_iv +" -in " + input_file +  " -out " + output_file
             process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
             output, error = process.communicate()
-            print "encryption with aes" + str(key_length) + " done."
+            # decipher with Bob key and IV
+            bashCommand = "openssl enc -aes"+ str(key_length) +" -K "+ Alice_key + " -iv " + Alice_iv +" -in " + output_file +  " -out " + "decipher.txt" + " -d"
+            process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()            
+            print "encryption and decryption with aes" + str(key_length) + " done."
     else:
-        print "error, Alice and Bob have different key or iv"            
+        print "error, Alice and Bob have different key or iv : cipher impossible"            
 
     #Plot graph 
     plt.figure(1)

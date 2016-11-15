@@ -6,7 +6,7 @@ Computer Science and Software Engineering.
 Neural crypto avoids a Diffie-Hellman exchange key protocol from MITM attack.
 
 ## openSSL
-Required openSSL to encyrpt with AES cipher.
+Require openSSL to encyrpt with AES cipher.
 
 ## Generate key and IV for AES encryption
 ```bash
@@ -29,4 +29,11 @@ openssl enc -aes256 -K <key> -iv <init vector> -in <inputfile> -out <outputfile>
 openssl enc -aes128 -K <key> -iv <init vector> -in <inputfile(enc)> -out <outputfile> -d
 openssl enc -aes192 -K <key> -iv <init vector> -in <inputfile(enc)> -out <outputfile> -d
 openssl enc -aes256 -K <key> -iv <init vector> -in <inputfile(enc)> -out <outputfile> -d
+```
+## Examples
+```bash
+echo "hello world" > hello.txt
+python run.py -i hello.txt -k 256 -K 20 -N 50 -L 6
+cat out.enc
+cat decipher.txt
 ```
