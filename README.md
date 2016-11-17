@@ -5,6 +5,8 @@ Computer Science and Software Engineering.
 
 Neural crypto avoids a Diffie-Hellman exchange key protocol from MITM attack.
 
+A summary of the article is in "neural-crypto.pdf".
+
 ## openSSL
 Require openSSL to encyrpt with AES cipher.
 
