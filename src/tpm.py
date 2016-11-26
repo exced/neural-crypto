@@ -89,7 +89,7 @@ class TPM:
             if i == j:
                 iv += str(self.W[i, j])
             key += str(self.W[i, j])
-        # sha1 iv
+        # sha256 iv
         hash_object_iv = hashlib.sha256(iv)
         hex_dig_iv = hash_object_iv.hexdigest()            
         # sha256 key
