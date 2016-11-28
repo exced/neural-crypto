@@ -2,7 +2,7 @@ import numpy as np
 import hashlib
 
 def theta(t1, t2):
-    return 1 if t1 == t2 else 0
+    return t1 == t2
 
 class TPM:
     '''TPM
