@@ -12,8 +12,9 @@ Require openSSL to encyrpt with AES cipher.
 
 ## Generate key and IV for AES encryption
 ```bash
-python run.py -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>
+python run.py -r hebbian -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>
 ```
+r : update rules : 'hebbian', 'anti_hebbian' or 'random_walk'
 key length options : 128, 192, 256
 iv length : [0:256]
 if inputfile is read, aes encryption is executed.

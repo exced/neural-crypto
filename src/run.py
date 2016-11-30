@@ -25,21 +25,23 @@ def main(argv):
     key_length = 128 #bits
     iv_length = 128 #bits
     update_rules = ['hebbian', 'anti_hebbian', 'random_walk']
-    update_rule = update_rules[0]
+    update_rule = 'hebbian'
     input_file = ''
     output_file = 'out.enc'
     has_input_file = False
     try:
-        opts, args = getopt.getopt(argv,"hK:N:L:k:v:i:o:",["K=","N=","L=","k=","v=","i=","o="])
+        opts, args = getopt.getopt(argv,"hK:N:L:k:v:i:o:r:",["K=","N=","L=","k=","v=","i=","o=","r="])
     except getopt.GetoptError:
         print 'unknown options'
-        print 'run.py -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
+        print 'run.py -r hebbian -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
+        print 'update rule : hebbian, anti_hebbian, random_walk'
         print 'key length options : 128, 192, 256'
         print 'iv length : [0:256] multiple of 4'
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'run.py -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
+            print 'run.py -r hebbian -i <input file> -o <output file> -K <nb hidden neurons> -N <nb input neurons> -L <range of weight> -k <key length> -v <iv length>'
+            print 'update rule : hebbian, anti_hebbian, random_walk'
             print 'default values : K=8, N=12, L=4'
             print 'key length options : 128, 192, 256'
             print 'iv length : [0:256]'
@@ -57,6 +59,8 @@ def main(argv):
             L = int(arg)
         elif opt in ("-v", "--v"):
             iv_length = int(arg)            
+        elif opt in ("-r", "--r"):
+            update_rule = str(arg)            
         elif opt in ("-k", "--k"):
             if arg == "128" or arg == "192" or arg == "256":
                 key_length = int(arg) 
@@ -121,11 +125,11 @@ def main(argv):
     if Alice_key == Bob_key and Alice_iv == Bob_iv:
         if has_input_file:
             import subprocess
-            # cipher with Alice key and IV
+            # cipher with AES 
             bashCommand = "openssl enc -aes"+ str(key_length) +" -K "+ Alice_key + " -iv " + Alice_iv +" -in " + input_file +  " -out " + output_file
             process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
             output, error = process.communicate()
-            # decipher with Bob key and IV
+            # decipher with AES
             bashCommand = "openssl enc -aes"+ str(key_length) +" -K "+ Alice_key + " -iv " + Alice_iv +" -in " + output_file +  " -out " + "decipher.txt" + " -d"
             process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
             output, error = process.communicate()            
