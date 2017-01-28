@@ -41,4 +41,4 @@ cat out.enc
 cat decipher.txt
 ```
 
-![example1 synchronization of Alice and Bob](https://github.com/exced/neural-crypto/extras/1.png)
+![example1 synchronization of Alice and Bob](https://github.com/exced/neural-crypto/blob/master/extras/ex1.png)
