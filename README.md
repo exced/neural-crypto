@@ -40,3 +40,5 @@ python run.py -i hello.txt -k 256 -K 20 -N 50 -L 6
 cat out.enc
 cat decipher.txt
 ```
+
+![example1 synchronization of Alice and Bob](https://github.com/exced/neural-crypto/extras/1.png)
